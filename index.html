@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Calculator | Professional Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(120deg, #1a73e8, #0d47a1);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,0 Q50,10 100,0 Z" fill="white"/></svg>');
+            background-size: 100% 100%;
+        }
+
+        .content {
+            display: flex;
+            padding: 0;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 30px;
+            flex: 1;
+            border-right: 1px solid #eee;
+        }
+
+        .calculator {
+            padding: 30px;
+            flex: 1;
+        }
+
+        .section-title {
+            color: #1a73e8;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            background: #e8f0fe;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a73e8;
+        }
+
+        .steps {
+            margin: 25px 0;
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: #1a73e8;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 15px;
+            margin-top: 3px;
+            font-size: 0.9rem;
+        }
+
+        .step-content h3 {
+            margin-bottom: 5px;
+            color: #202124;
+        }
+
+        .step-content p {
+            color: #5f6368;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #202124;
+            font-weight: 500;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .input-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5f6368;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 2px solid #dadce0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .input-container input:focus {
+            border-color: #1a73e8;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(120deg, #1a73e8, #0d47a1);
+            color: white;
+        }
+
+        .btn-reset {
+            background: #f1f3f4;
+            color: #5f6368;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 30px;
+            background: #e8f0fe;
+            border-radius: 10px;
+            padding: 25px;
+            display: none;
+        }
+
+        .results-title {
+            color: #1a73e8;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #5f6368;
+            font-weight: 500;
+        }
+
+        .result-value {
+            color: #202124;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .highlight {
+            color: #1a73e8;
+            font-size: 1.3rem;
+        }
+
+        .visualization {
+            margin-top: 25px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .progress-container {
+            margin-top: 15px;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: #5f6368;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #2e7d32);
+            border-radius: 10px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #5f6368;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .instructions {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calculator"></i> Attendance Calculator</h1>
+            <p>Calculate your attendance percentage and find out how many classes you need to reach your target</p>
+        </div>
+        
+        <div class="content">
+            <div class="instructions">
+                <div class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    <h2>How to Use This Calculator</h2>
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Enter Classes Information</h3>
+                            <p>Fill in the total classes held and the classes you've attended.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Set Your Target</h3>
+                            <p>Enter your desired attendance percentage (e.g., 75% or 80%).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Calculate</h3>
+                            <p>Click the "Calculate" button to see your current attendance and how many classes you need to reach your target.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Plan Ahead</h3>
+                            <p>Use the results to plan your attendance for the rest of the term.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tip-box" style="background: #e8f0fe; padding: 15px; border-radius: 10px; margin-top: 20px;">
+                    <p style="color: #1a73e8; font-weight: 500;"><i class="fas fa-lightbulb"></i> Pro Tip: To maintain your desired attendance percentage, try to attend all classes and account for unexpected absences in your planning.</p>
+                </div>
+            </div>
+            
+            <div class="calculator">
+                <div class="section-title">
+                    <i class="fas fa-edit"></i>
+                    <h2>Calculate Attendance</h2>
+                </div>
+                
+                <div class="input-group">
+                    <label for="totalClasses">Total Classes Held</label>
+                    <div class="input-container">
+                        <i class="fas fa-chalkboard"></i>
+                        <input type="number" id="totalClasses" placeholder="Enter total classes" min="1">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="attendedClasses">Classes Attended</label>
+                    <div class="input-container">
+                        <i class="fas fa-user-check"></i>
+                        <input type="number" id="attendedClasses" placeholder="Enter classes attended" min="0">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="targetPercentage">Target Percentage (%)</label>
+                    <div class="input-container">
+                        <i class="fas fa-bullseye"></i>
+                        <input type="number" id="targetPercentage" placeholder="Enter target percentage" min="1" max="100" value="75">
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-calculate" id="calculateBtn">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                    <button class="btn btn-reset" id="resetBtn">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+                
+                <div class="results" id="results">
+                    <div class="results-title">
+                        <i class="fas fa-chart-line"></i>
+                        <h2>Attendance Results</h2>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Current Attendance:</span>
+                        <span class="result-value" id="currentAttendance">0%</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Classes Missed:</span>
+                        <span class="result-value" id="missedClasses">0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Target Attendance:</span>
+                        <span class="result-value" id="targetDisplay">75%</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Classes Needed to Reach Target:</span>
+                        <span class="result-value highlight" id="classesNeeded">0</span>
+                    </div>
+                    
+                    <div class="visualization">
+                        <h3>Attendance Progress</h3>
+                        <div class="progress-container">
+                            <div class="progress-labels">
+                                <span>0%</span>
+                                <span id="currentPercentageLabel">0%</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Attendance Calculator Tool • For Students and Educators • © 2023</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const totalClassesInput = document.getElementById('totalClasses');
+            const attendedClassesInput = document.getElementById('attendedClasses');
+            const targetPercentageInput = document.getElementById('targetPercentage');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const resultsDiv = document.getElementById('results');
+            const currentAttendanceSpan = document.getElementById('currentAttendance');
+            const missedClassesSpan = document.getElementById('missedClasses');
+            const targetDisplaySpan = document.getElementById('targetDisplay');
+            const classesNeededSpan = document.getElementById('classesNeeded');
+            const progressFill = document.getElementById('progressFill');
+            const currentPercentageLabel = document.getElementById('currentPercentageLabel');
+            
+            // Set default target percentage
+            targetPercentageInput.value = 75;
+            
+            // Calculate button click event
+            calculateBtn.addEventListener('click', function() {
+                // Get input values
+                const totalClasses = parseInt(totalClassesInput.value);
+                const attendedClasses = parseInt(attendedClassesInput.value);
+                const targetPercentage = parseFloat(targetPercentageInput.value);
+                
+                // Validate inputs
+                if (isNaN(totalClasses) || isNaN(attendedClasses) || isNaN(targetPercentage)) {
+                    alert('Please enter valid numbers in all fields');
+                    return;
+                }
+                
+                if (attendedClasses > totalClasses) {
+                    alert('Attended classes cannot be more than total classes');
+                    return;
+                }
+                
+                if (targetPercentage < 0 || targetPercentage > 100) {
+                    alert('Target percentage must be between 0 and 100');
+                    return;
+                }
+                
+                // Calculate current attendance percentage
+                const currentPercentage = (attendedClasses / totalClasses) * 100;
+                
+                // Calculate missed classes
+                const missedClasses = totalClasses - attendedClasses;
+                
+                // Calculate classes needed to reach target
+                let classesNeeded = 0;
+                if (currentPercentage < targetPercentage) {
+                    classesNeeded = Math.ceil((targetPercentage/100 * totalClasses - attendedClasses) / (1 - targetPercentage/100));
+                }
+                
+                // Display results
+                currentAttendanceSpan.textContent = currentPercentage.toFixed(2) + '%';
+                missedClassesSpan.textContent = missedClasses;
+                targetDisplaySpan.textContent = targetPercentage + '%';
+                classesNeededSpan.textContent = classesNeeded > 0 ? classesNeeded : 'Target already achieved';
+                
+                // Update progress bar
+                progressFill.style.width = currentPercentage + '%';
+                currentPercentageLabel.textContent = currentPercentage.toFixed(1) + '%';
+                
+                // Show results
+                resultsDiv.style.display = 'block';
+            });
+            
+            // Reset button click event
+            resetBtn.addEventListener('click', function() {
+                totalClassesInput.value = '';
+                attendedClassesInput.value = '';
+                targetPercentageInput.value = '75';
+                resultsDiv.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
